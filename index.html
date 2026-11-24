@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f6f2">
+  <meta name="description" content="Зручний трекер витрат із пошуком, фільтрами та статистикою за категоріями.">
+  <title>Мої витрати — Expense Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#dashboard" aria-label="На головну">
+        <span class="brand-mark" aria-hidden="true">₴</span>
+        <span class="brand-name">раху<span>й</span></span>
+      </a>
+      <div class="sidebar-label">РОБОЧИЙ ПРОСТІР</div>
+      <nav class="side-nav" aria-label="Основна навігація">
+        <a class="nav-link active" href="#dashboard"><span class="nav-icon" aria-hidden="true">▦</span> Огляд</a>
+        <a class="nav-link" href="#expenses"><span class="nav-icon" aria-hidden="true">↗</span> Витрати</a>
+        <a class="nav-link" href="#registration"><span class="nav-icon" aria-hidden="true">♙</span> Реєстрація</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="tip-card">
+          <span class="tip-spark" aria-hidden="true">✳</span>
+          <p class="tip-title">Маленька порада</p>
+          <p class="tip-copy">Регулярний облік допомагає краще розуміти свої фінансові звички.</p>
+        </div>
+        <div class="profile-row"><span class="avatar">М</span><span><strong>Мій простір</strong><small>Особистий облік</small></span><span class="profile-dots">•••</span></div>
+      </div>
+    </aside>
+
+    <main class="main-content" id="dashboard">
+      <header class="topbar">
+        <div class="breadcrumb">Особисті фінанси <span>/</span> <strong>Огляд</strong></div>
+        <div class="topbar-right"><span class="today-label" id="todayLabel"></span><span class="top-avatar">М</span></div>
+      </header>
+
+      <div class="page-wrap">
+        <section class="welcome-row">
+          <div><p class="eyebrow">ВАШІ ФІНАНСИ ПІД КОНТРОЛЕМ</p><h1>Вітаю у вашому просторі <span class="wave">✳</span></h1><p class="subtitle">Записуйте витрати, відстежуйте звички й залишайтеся в курсі.</p></div>
+          <a class="primary-button jump-button" href="#add-expense"><span aria-hidden="true">＋</span> Додати витрату</a>
+        </section>
+
+        <section class="summary-grid" aria-label="Підсумок витрат">
+          <article class="summary-card total-card"><div class="card-top"><span class="card-label">Витрачено всього</span><span class="metric-icon purple" aria-hidden="true">↗</span></div><div class="metric-value" id="totalAmount">0 ₴</div><div class="metric-foot"><span class="status-dot"></span><span>Усі записані витрати</span></div><div class="total-decoration" aria-hidden="true">₴</div></article>
+          <article class="summary-card count-card"><div class="card-top"><span class="card-label">Кількість витрат</span><span class="metric-icon green" aria-hidden="true">≡</span></div><div class="metric-value" id="expenseCount">0</div><div class="metric-foot">Записів у вашому списку</div><div class="mini-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></article>
+          <article class="summary-card average-card"><div class="card-top"><span class="card-label">Середня витрата</span><span class="metric-icon orange" aria-hidden="true">⌁</span></div><div class="metric-value" id="averageAmount">0 ₴</div><div class="metric-foot">На один запис</div><div class="average-line" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></article>
+        </section>
+
+        <section class="content-grid">
+          <article class="panel stats-panel">
+            <div class="panel-heading"><div><p class="eyebrow">АНАЛІТИКА</p><h2>Витрати за категоріями</h2></div><span class="panel-icon" aria-hidden="true">◷</span></div>
+            <p class="panel-subtitle">Розподіл усіх ваших витрат</p>
+            <div class="category-stats" id="categoryStats"></div>
+          </article>
+
+          <article class="panel add-panel" id="add-expense">
+            <div class="panel-heading"><div><p class="eyebrow">НОВИЙ ЗАПИС</p><h2>Додати витрату</h2></div><span class="panel-icon plus-icon" aria-hidden="true">＋</span></div>
+            <p class="panel-subtitle">Заповніть деталі покупки</p>
+            <form id="expenseForm" novalidate>
+              <label class="field-label" for="expenseTitle">Назва витрати</label>
+              <input class="text-input" id="expenseTitle" name="title" type="text" placeholder="Наприклад, кава зранку" maxlength="80" required>
+              <p class="field-error" id="expenseTitleError" aria-live="polite"></p>
+              <div class="form-two-col">
+                <div><label class="field-label" for="expenseAmount">Сума, ₴</label><div class="amount-wrap"><input class="text-input" id="expenseAmount" name="amount" type="number" min="0.01" step="0.01" placeholder="0.00" required><span>₴</span></div><p class="field-error" id="expenseAmountError" aria-live="polite"></p></div>
+                <div><label class="field-label" for="expenseCategory">Категорія</label><div class="select-wrap"><select class="text-input" id="expenseCategory" name="category"><option value="Їжа">Їжа</option><option value="Транспорт">Транспорт</option><option value="Покупки">Покупки</option><option value="Інше">Інше</option></select><span aria-hidden="true">⌄</span></div></div>
+              </div>
+              <button class="primary-button submit-button" type="submit">＋ Додати витрату</button>
+              <p class="form-note"><span aria-hidden="true">▣</span> Дані зберігаються лише у вашому браузері</p>
+            </form>
+          </article>
+        </section>
+
+        <section class="panel list-panel" id="expenses">
+          <div class="list-heading"><div><p class="eyebrow">ІСТОРІЯ</p><h2>Останні витрати <span class="count-pill" id="listCount">0</span></h2></div><button class="clear-button" id="clearExpenses" type="button">♲ <span>Очистити всі</span></button></div>
+          <div class="list-controls"><label class="search-box"><span aria-hidden="true">⌕</span><input id="searchInput" type="search" placeholder="Пошук за назвою..." aria-label="Пошук витрат за назвою"></label><label class="filter-select"><span>Категорія:</span><select id="categoryFilter" aria-label="Фільтр за категорією"><option value="Усі">Усі категорії</option><option value="Їжа">Їжа</option><option value="Транспорт">Транспорт</option><option value="Покупки">Покупки</option><option value="Інше">Інше</option></select><span class="select-chevron" aria-hidden="true">⌄</span></label></div>
+          <div class="expense-list" id="expenseList" aria-live="polite"></div>
+          <div class="empty-state" id="emptyState"><span class="empty-icon" aria-hidden="true">✳</span><strong>Тут поки порожньо</strong><span>Додайте першу витрату або змініть фільтри.</span></div>
+        </section>
+
+        <section class="registration-section" id="registration">
+          <div class="registration-intro"><p class="eyebrow">ДОДАТКОВЕ ЗАВДАННЯ</p><h2>Форма реєстрації</h2><p class="subtitle">Навчальна форма з перевіркою даних. Обліковий запис не створюється.</p></div>
+          <article class="panel registration-panel">
+            <form id="registrationForm" novalidate>
+              <div class="registration-grid">
+                <div class="form-field"><label class="field-label" for="username">Ім’я користувача</label><input class="text-input" id="username" name="username" type="text" autocomplete="username" placeholder="Ваше ім’я"><p class="field-error" id="usernameError" aria-live="polite"></p></div>
+                <div class="form-field"><label class="field-label" for="email">Email</label><input class="text-input" id="email" name="email" type="email" autocomplete="email" placeholder="name@example.com"><p class="field-error" id="emailError" aria-live="polite"></p></div>
+                <div class="form-field"><label class="field-label" for="password">Пароль</label><input class="text-input" id="password" name="password" type="password" autocomplete="new-password" placeholder="Мінімум 8 символів"><p class="field-error" id="passwordError" aria-live="polite"></p></div>
+                <div class="form-field"><label class="field-label" for="confirmPassword">Підтвердження пароля</label><input class="text-input" id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" placeholder="Повторіть пароль"><p class="field-error" id="confirmPasswordError" aria-live="polite"></p></div>
+              </div>
+              <label class="checkbox-row"><input id="terms" name="terms" type="checkbox"><span class="custom-checkbox" aria-hidden="true"></span><span>Погоджуюсь з умовами</span></label><p class="field-error terms-error" id="termsError" aria-live="polite"></p>
+              <div class="registration-actions"><button class="primary-button" type="submit">Зареєструватися</button><p id="registrationSuccess" class="success-message" role="status"></p></div>
+            </form>
+            <p class="privacy-note">Пароль використовується лише для перевірки форми та не зберігається.</p>
+          </article>
+        </section>
+        <footer class="footer"><span>рахуй <span class="footer-dot">•</span> Ваші фінанси — у ваших руках</span><span>Зроблено для щоденного спокою <span aria-hidden="true">♡</span></span></footer>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
